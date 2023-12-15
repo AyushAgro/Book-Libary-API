@@ -1,0 +1,369 @@
+Gateway_api:
+  port: 8088
+  debug: True
+  url_prefix: '/library_api'
+
+Notifier:
+  active: False
+
+Logging:
+  version: 1
+  disable_existing_loggers: False
+  formatters:
+    simple:
+      format: '%(asctime)s - %(name)s - %(filename)s - %(lineno)s - %(levelname)s - %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    file:
+      class: logging.FileHandler
+      level: DEBUG
+      filename: log/dev.log
+      formatter: simple
+  root:
+    level: DEBUG
+    handlers: [ file ]
+
+LibraryDatabase:
+  db_name: books_library_dev
+  schema_name: public
+  host: localhost
+  port: 5432
+  tables_config:
+    books:
+      table_name: 'books'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    cart:
+      table_name: 'cart'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    orders:
+      table_name: 'orders'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    users:
+      table_name: 'users'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    category:
+      table_name: 'category'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    book_category_view:
+      table_name: 'book_category_view'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+
+ApiEndpoints:
+  # Category Create
+  create_category:
+    active: True
+  # FUTURE: everything smallcase through out projects
+    METHOD: POST
+    admin_only: True
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          category:
+            param_name: category
+            param_dtype: str
+            param_validation_function: check_string
+  # Category Read
+  fetch_category:
+    active: True
+    METHOD: GET
+    admin_only: True
+    login_required: True
+  # Category Update
+  update_category:
+    active: True
+    METHOD: PATCH
+    admin_only: True
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          old_category:
+            param_name: old_category
+            param_dtype: str
+            param_validation_function: check_string
+          new_category:
+            param_name: new_category
+            param_dtype: str
+            param_validation_function: check_string
+  # Category Delete
+  delete_category:
+    active: True
+    METHOD: DELETE
+    admin_only: True
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          category_idx:
+            param_name: category_idx
+            param_dtype: int
+            param_validation_function: check_int
+  # Book Create
+  add_book:
+    active: True
+    METHOD: POST
+    admin_only: True
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          title:
+            param_name: title
+            param_dtype: int_or_str
+            param_validation_function: check_string
+          author:
+            param_name: author
+            param_dtype: str
+            param_validation_function: check_string
+          category_idx:
+            param_name: category_idx
+            param_dtype: int
+            param_validation_function: check_int
+          published_year:
+            param_name: published_year
+            param_dtype: int
+            param_validation_function: check_year
+          price:
+            param_name: price
+            param_dtype: int_or_float
+            param_validation_function: check_decimal
+          stock_unit:
+            param_name: stock_unit
+            param_dtype: int
+            param_validation_function: check_int
+          tags:
+            param_name: tags
+            param_dtype: dict
+            param_validation_function: check_tags
+  # Books Read
+  fetch_books:
+    active: True
+    METHOD: GET
+    admin_only: False
+    login_required: False
+    params:
+      optional:
+        function: handle_optional_params
+        values:
+          category:
+            param_name: category
+            param_dtype: str
+            param_validation_function: check_string
+          author:
+            param_name: author
+            param_dtype: str
+            param_validation_function: check_string
+          title:
+            param_name: title
+            param_dtype: int_or_str
+            param_validation_function: check_string
+          filter_operation:
+            param_name: filter_operation
+            param_dtype: str
+            param_validation_function: check_filter_operation
+          published_year:
+            param_name: published_year
+            param_dtype: int
+            param_validation_function: check_year
+          book_idx:
+            param_name: book_idx
+            param_dtype: int
+            param_validation_function: check_int
+  # Update Boot details
+  update_book_details:
+    active: True
+    METHOD: PATCH
+    admin_only: True
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          book_id:
+            param_name: book_id
+            param_dtype: int
+            param_validation_function: check_int
+      optional:
+        function: handle_optional_params
+        values:
+          title:
+            param_name: title
+            param_dtype: int_or_str
+            param_validation_function: check_string
+          author:
+            param_name: author
+            param_dtype: str
+            param_validation_function: check_string
+          category_idx:
+            param_name: category_idx
+            param_dtype: int
+            param_validation_function: check_int
+          published_year:
+            param_name: published_year
+            param_dtype: int
+            param_validation_function: check_year
+          price:
+            param_name: price
+            param_dtype: int_or_float
+            param_validation_function: check_decimal
+  # Book Delete
+  delete_book:
+    active: True
+    METHOD: DELETE
+    admin_only: True
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          book_id:
+            param_name: book_id
+            param_dtype: int
+            param_validation_function: check_int
+  # Add New book to the user cart based on book id
+  add_to_cart:
+    active: True
+    METHOD: POST
+    admin_only: False
+    login_required: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          book_id:
+            param_name: book_id
+            param_dtype: int
+            param_validation_function: check_param
+  # List Book in user cart
+  list_books_in_cart:
+    active: True
+    METHOD: GET
+    admin_only: False
+    login_required: True
+  # Delete Current User Cart
+  empty_cart:
+    active: True
+    METHOD: DELETE
+    admin_only: False
+    login_required: True
+  # Checkout Order
+  checkout_order:
+    active: True
+    METHOD: POST
+    admin_only: False
+    login_required: True
+  # Fetch User Past Orders
+  fetch_user_past_orders:
+    active: True
+    METHOD: GET
+    admin_only: False
+    login_required: True
+  # Fetch all past order in library
+  fetch_all_past_orders:
+    active: True
+    METHOD: GET
+    admin_only: True
+    login_required: True
+  # User Login
+  login:
+    active: True
+    METHOD: GET
+    admin_only: False
+    login_required: False
+    no_user_logged_in: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          email:
+            param_name: email
+            param_dtype: str
+            param_validation_function: check_email
+          password:
+            param_name: password
+            param_dtype: str
+            param_validation_function: check_login_password
+  # User Register
+  register:
+    active: True
+    METHOD: POST
+    admin_only: False
+    login_required: False
+    no_user_logged_in: True
+    params:
+      mandatory:
+        function: handle_params
+        values:
+          email:
+            param_name: email
+            param_dtype: str
+            param_validation_function: check_email
+          password:
+            param_name: password
+            param_dtype: str
+            param_validation_function: check_register_password
+      optional:
+        function: handle_optional_params
+        values:
+          name:
+            param_name: name
+            param_dtype: str
+            param_validation_function: check_string
+          tags:
+            param_name: tags
+            param_dtype: dict
+            param_validation_function: check_tags
+  # User Logout
+  logout:
+    active: True
+    METHOD: POST
+    admin_only: False
+    login_required: True
+
+#FUTURE: everything smallcase through out projects
+CokkieSecretKey: "0987654321234567890"

@@ -1,0 +1,63 @@
+Logging:
+  version: 1
+  disable_existing_loggers: False
+  formatters:
+    simple:
+      format: '%(asctime)s - %(name)s - %(filename)s - %(lineno)s - %(levelname)s - %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    file:
+      class: logging.FileHandler
+      level: DEBUG
+      filename: logs/tests.logs
+      formatter: simple
+  root:
+    level: DEBUG
+    handlers: [ file ]
+
+LibraryDatabase:
+  db_name: books_library_dev
+  schema_name: public
+  host: localhost
+  port: 5432
+  tables_config:
+    books:
+      table_name: 'books'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    cart:
+      table_name: 'cart'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    orders:
+      table_name: 'orders'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True
+    users:
+      table_name: 'users'
+      read_user_config:
+        username: 'library_api_readuser'
+        password: 'ctrXEwK4b9BBVc'
+      write_user_config:
+        username: 'library_api_writeuser'
+        password: '6WysfNceDXvjA4'
+      db_write_enable: True

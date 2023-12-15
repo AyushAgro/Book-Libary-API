@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-dotenv = "==0.15.0"
+psycopg2 = "==2.8.6"
+pyyaml = "==5.4.1"
+tornado = "==6.1"
+requests = "==2.25.1"
+pycryptodome = "==3.9.6"
+numpy = "==1.24.3"
+pandas = "==2.0.2"
+books_library_api = {editable = true, path = "."}
+python-telegram-bot = "==13.11"
+tracebackturbo3 = '==0.3'
+
+[dev-packages]
+isort = "*"
+yapf = "*"
+ipython = "*"
+
+[requires]
+python_version = "3.8"
